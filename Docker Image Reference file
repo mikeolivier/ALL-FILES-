@@ -1,0 +1,41 @@
+
+#                     follow this steps for your Docker projects.
+
+#How to Build Docker Image and Push it to Docker Hub
+# 1- sign up to your docker hub account. 
+# 2 create a repository to store the docker image in docker hub
+
+# launch an ec2 instance. open port 80 and port 22
+
+# install and configure docker on the ec2 instance
+# SSH in your instance and run this commands to build your docker and push it to your docker hub.
+sudo yum update -y
+sudo amazon-linux-extras install docker -y
+sudo service docker start
+# this command is to make sure that docker is always in the start state evn when we reboot our ec2
+sudo systemctl enable docker
+# this command is to add the ec2 user to the docker group so you can excute commands without using sudo
+sudo usermod -a -G docker ec2-user
+docker info
+
+# create a dockerfile (a Docker file contain all the commands we want to use to build our docker image)
+sudo vi Dockerfile 
+
+# build the docker image
+docker build -t techmax .
+
+# login to your docker hub account
+docker login --username aosnotes77 
+
+# use the docker tag command to give the image a new name
+docker tag techmax aosnotes77/techmax
+
+# push the image to your docker hub repository
+docker push aosnotes77/techmax
+
+# start the container to test the image 
+docker run -dp 80:80 aosnotes77/techmax
+
+# references Note to install Docker on Amazon ec2
+# https://docs.aws.amazon.com/AmazonECS/latest/developerguide/create-container-image.html
+# https://docs.docker.com/get-started/02_our_app/
