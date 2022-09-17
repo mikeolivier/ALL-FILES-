@@ -1,0 +1,50 @@
+#!/bin/bash
+sudo su
+yum update -y
+yum install -y httpd
+cd /var/www/html
+wget https://github.com/azeezsalu/jupiter/archive/refs/heads/main.zip
+unzip main.zip
+cp -r jupiter-main/* /var/www/html/
+rm -rf jupiter-main main.zip
+systemctl enable httpd 
+systemctl start httpd
+
+# This are the commands we will use to build container image,
+# NB this commands have to be in Yml format. 
+# we used the command above to create this Docker file bellow. 
+
+# we have to start with a base image beggining with (FROM) then the base image
+# NB the base image come from Docker Hub
+FROM amazonlinux:latest
+
+# Install dependencies
+RUN yum update -y && \
+    yum install -y httpd && \
+    yum search wget && \
+    yum install wget -y && \
+    yum install unzip -y
+
+# change directory
+RUN cd /var/www/html
+
+# download webfiles form Git Hub
+RUN wget https://github.com/azeezsalu/techmax/archive/refs/heads/main.zip
+
+# unzip the zip folder you downloaded. 
+RUN unzip main.zip
+
+# copy all the web files into html directory
+RUN cp -r techmax-main/* /var/www/html/
+
+# once the web file is copied in tho the html directory, remove unwanted folder
+RUN rm -rf techmax-main main.zip
+
+# exposes port 80 on the container
+EXPOSE 80
+
+# we are using entry point and entry point is going to 
+# set the default application that will start when the container start
+ENTRYPOINT ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+
+# when is done, push it to the Git Hub Repo
