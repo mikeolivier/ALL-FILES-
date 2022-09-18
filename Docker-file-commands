@@ -9,3 +9,13 @@ cp -r jupiter-main/* /var/www/html/
 rm -rf jupiter-main main.zip
 systemctl enable httpd 
 systemctl start httpd
+
+
+
+
+
+# How to Create a Dockerfile for a Static HTML Website
+#  here we are going to create a docker file that we will use to build the container image for a website
+#    a Docker file is a text document that contains all the commands we will call on the command line to create a container image.
+# to create the container file that we will use to build the container image, the first thing to
+do is to open Visual studio code and open your project folder. that will be the docker repo we cloned on our computer.  
